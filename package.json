@@ -1,0 +1,18 @@
+{
+  "name": "node-simple-rbac",
+  "version": "0.0.1",
+  "description": "Simple RBAC implementation for node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+ "repository": {
+    "type": "git",
+    "url": "git://github.com/mikeysteele/node-simple-rbac"
+  }, 
+ "keywords": [
+    "RBAC"
+  ],
+  "author": "Michael Westcott",
+  "license": "MIT"
+}
