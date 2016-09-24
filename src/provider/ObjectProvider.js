@@ -32,7 +32,7 @@ module.exports.getPermissions = function(object) {
             };
             resolve(permissions);
         }catch(e){
-            reject(e)
+            reject(e);
         }
     });
 };
@@ -40,7 +40,7 @@ module.exports.getPermissions = function(object) {
 function flatternPermissions(permissions){
     return permissions.map(function(permission){
         if (typeof permission === 'string'){
-            return premission;
+            return permission;
         }
         return permission[permissionName];
     });
