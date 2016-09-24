@@ -21,7 +21,7 @@ function resolveProvider(providerConfig) {
         return provider;
     }
     if (typeof provider === 'object') {
-        if (!provider.getPermissions instanceof Function) {
+        if (provider.getPermissions instanceof Function === false) {
             throw new Error('Provider object must have getPermissions()');
         }
         if (provider.setConfig instanceof Function) {
