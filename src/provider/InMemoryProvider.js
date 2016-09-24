@@ -10,7 +10,7 @@ module.exports.setConfig = function(config) {
 };
 module.exports.getPermissions = function(user) {
     var role = user.role;
-    return new Promise(function(fulfill, reject) {
+    return new Promise(function(resolve, reject) {
         if (!_roles) {
             reject("roles not set");
         } else if (!role) {
@@ -18,7 +18,7 @@ module.exports.getPermissions = function(user) {
         } else if (typeof role !== 'string') {
             reject('role needs to be a string');
         } else {
-            fulfill(_roles[role]);
+            resolve(_roles[role]);
         }
     });
 };

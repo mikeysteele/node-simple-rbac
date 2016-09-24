@@ -15,8 +15,8 @@ function getProviders() {
     return providers;
 }
 
-function resolveProvider(config) {
-    var provider = config.provider || 'InMemoryProvider';
+function resolveProvider(providerConfig) {
+    var provider = providerConfig.type || 'InMemoryProvider';
     if (!provider) {
         return provider;
     }
@@ -25,13 +25,13 @@ function resolveProvider(config) {
             throw new Error('Provider object must have getPermissions()');
         }
         if (provider.setConfig instanceof Function) {
-            provider.setConfig(config);
+            provider.setConfig(providerConfig);
         }
         return provider;
     }
     var providerInstance = getProviders()[provider];
     if (providerInstance.setConfig instanceof Function) {
-        providerInstance.setConfig(config);
+        providerInstance.setConfig(providerConfig);
     }
     return providerInstance;
 }
@@ -39,27 +39,27 @@ function resolveProvider(config) {
 function rbac(config) {
     this.guards = config.guards || {};
     this.assertions = config.assertions || {};
-    this.provider = resolveProvider(config);
+    this.provider = resolveProvider(config.provider);
 }
 rbac.prototype.IsGranted = function(user, permission, resource) {
     var self = this;
-    return new Promise(function(fulfill, reject) {
+    return new Promise(function(resolve, reject) {
         self.provider.getPermissions(user).then(function(GrantedPermissions) {
             if (GrantedPermissions.indexOf(permission) > -1) {
                 if (resource) {
                     self._assert(user, permission, resource).then(function(status) {
-                        fulfill(status);
+                        resolve(status);
                     }, function(e) {
                         reject({
-                            error: 'Assertion Failed',
+                            error: 'Assertion Failed to complete',
                             detail: e
                         });
                     });
                 } else {
-                    fulfill(true);
+                    resolve(true);
                 }
             } else {
-                fulfill(false);
+                resolve(false);
             }
         }, function(err) {
             reject({
@@ -72,11 +72,11 @@ rbac.prototype.IsGranted = function(user, permission, resource) {
 rbac.prototype._assert = function(user, permission, resource) {
     var assertion = this.assertions[permission];
     var self = this;
-    return new Promise(function(fulfill, reject) {
+    return new Promise(function(resolve, reject) {
         if (assertion) {
             if (typeof assertion === 'function') {
                 assertion(self, user, resource, function(success) {
-                    fulfill(success);
+                    resolve(success);
                     return;
                 }, function(e) {
                     reject(e);
@@ -85,7 +85,7 @@ rbac.prototype._assert = function(user, permission, resource) {
                 reject('Assertion was not callable');
             }
         } else {
-            fulfill(true);
+            resolve(true);
         }
     });
 };
