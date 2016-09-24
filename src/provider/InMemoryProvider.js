@@ -3,25 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-var roles;
-module.exports.setConfig = function(config){
+"use strict";
+var _roles;
+module.exports.setConfig = function(config) {
     _roles = config.roles;
 };
-module.exports.getPermissions = function(user){
-    var role = user.role
-    return new Promise(function(fulfill,reject){
-        if (!_roles){
+module.exports.getPermissions = function(user) {
+    var role = user.role;
+    return new Promise(function(fulfill, reject) {
+        if (!_roles) {
             reject("roles not set");
-        }else if (!role){
+        } else if (!role) {
             reject("no role passed");
-        }else if (typeof role !== 'string' ){
-            console.log('here');
+        } else if (typeof role !== 'string') {
             reject('role needs to be a string');
-        }else{
+        } else {
             fulfill(_roles[role]);
         }
     });
-    
 };
-

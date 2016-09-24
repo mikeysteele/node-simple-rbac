@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+"use strict";
 var providers;
-var _config;
-
 
 function getProviders() {
     if (!providers) {
@@ -17,77 +15,70 @@ function getProviders() {
     return providers;
 }
 
-
 function resolveProvider(config) {
-    provider = config.provider || 'InMemoryProvider';
+    var provider = config.provider || 'InMemoryProvider';
     if (!provider) {
         return provider;
     }
     if (typeof provider === 'object') {
-        if (!provider.getPermissions instanceof Function){
+        if (!provider.getPermissions instanceof Function) {
             throw new Error('Provider object must have getPermissions()');
         }
-        if (provider.setConfig instanceof Function){
+        if (provider.setConfig instanceof Function) {
             provider.setConfig(config);
         }
         return provider;
     }
     var providerInstance = getProviders()[provider];
-    if (providerInstance.setConfig instanceof Function){
-            providerInstance.setConfig(config);
+    if (providerInstance.setConfig instanceof Function) {
+        providerInstance.setConfig(config);
     }
-       
-   
-    
     return providerInstance;
-
 }
 
 function rbac(config) {
-   
     this.guards = config.guards || {};
     this.assertions = config.assertions || {};
     this.provider = resolveProvider(config);
 }
-
-rbac.prototype.IsGranted = function (user, permission,resource) {
+rbac.prototype.IsGranted = function(user, permission, resource) {
     var self = this;
-    return new Promise(function (fulfill, reject) {    
-        self.provider.getPermissions(user).then(function (GrantedPermissions) {
+    return new Promise(function(fulfill, reject) {
+        self.provider.getPermissions(user).then(function(GrantedPermissions) {
             if (GrantedPermissions.indexOf(permission) > -1) {
-                if (resource){
-                    self._assert(user, permission, resource).then(function(status){
+                if (resource) {
+                    self._assert(user, permission, resource).then(function(status) {
                         fulfill(status);
-                    }, function(e){
-                        console.log('rejecting');
-                        reject(e);
+                    }, function(e) {
+                        reject({
+                            error: 'Assertion Failed',
+                            detail: e
+                        });
                     });
-                }else{
-                     fulfill(true);
+                } else {
+                    fulfill(true);
                 }
-
-            }else{
+            } else {
                 fulfill(false);
             }
-                      
-        },function(err){
-               console.log('error in assertion');
-            reject(err);
+        }, function(err) {
+            reject({
+                error: 'Provider failed to get permissions',
+                detail: err
+            });
         });
     });
 };
-
-rbac.prototype._assert = function (user, permission, resource) {
+rbac.prototype._assert = function(user, permission, resource) {
     var assertion = this.assertions[permission];
     var self = this;
-    return new Promise(function (fulfill, reject) {
+    return new Promise(function(fulfill, reject) {
         if (assertion) {
             if (typeof assertion === 'function') {
-                assertion(self, user, resource, function (success) {
+                assertion(self, user, resource, function(success) {
                     fulfill(success);
                     return;
-                }, function(e){
-                    
+                }, function(e) {
                     reject(e);
                 });
             } else {
@@ -95,9 +86,7 @@ rbac.prototype._assert = function (user, permission, resource) {
             }
         } else {
             fulfill(true);
-
         }
     });
 };
-
 module.exports = rbac;

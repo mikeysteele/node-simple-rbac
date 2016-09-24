@@ -6,13 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
- "repository": {
+  "repository": {
     "type": "git",
     "url": "git://github.com/mikeysteele/node-simple-rbac"
-  }, 
- "keywords": [
+  },
+  "keywords": [
     "RBAC"
   ],
   "author": "Michael Westcott",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "grunt-jsbeautifier": "^0.2.13"
+  }
 }
