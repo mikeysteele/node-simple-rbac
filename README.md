@@ -22,7 +22,7 @@ Assertions can be used to see if a specific user has access to a specific resour
 function assertion(rbac, user, resource, resolve,reject) {
         try{
             rbac.IsGranted(user, 'superuser').then(function (access) {
-                if (assess){
+                if (access){
                     return resolve(true);
                 }
                 resolve(user.username === resource.author.username);

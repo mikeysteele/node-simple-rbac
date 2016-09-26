@@ -16,9 +16,10 @@ function getProviders() {
 }
 
 function resolveProvider(providerConfig) {
-    var provider = providerConfig.type || 'InMemoryProvider';
+    providerConfig.type = providerConfig.type ||'InMemoryProvider';
+    var provider = providerConfig.type;
     if (!provider) {
-        return provider;
+        throw new Error('no provider available');
     }
     if (typeof provider === 'object') {
         if (provider.getPermissions instanceof Function === false) {
@@ -37,6 +38,7 @@ function resolveProvider(providerConfig) {
 }
 
 function rbac(config) {
+    this.config = config;
     this.guards = config.guards || {};
     this.assertions = config.assertions || {};
     this.provider = resolveProvider(config.provider);
@@ -64,7 +66,8 @@ rbac.prototype.IsGranted = function(user, permission, resource) {
         }, function(err) {
             reject({
                 error: 'Provider failed to get permissions',
-                detail: err
+                detail: err,
+                provider: self.config.provider.type
             });
         });
     });
