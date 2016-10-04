@@ -13,8 +13,8 @@ module.exports.setConfig = function(config){
     permissionName = config.permissionName;
 };
 module.exports.getPermissions = function(object) {
-    var permissions;
-    var roles;
+    var permissions  = [];
+    var roles = [];
     return new Promise(function(resolve, reject) {       
         try{
             if (object[roleKey] instanceof Array === false){
