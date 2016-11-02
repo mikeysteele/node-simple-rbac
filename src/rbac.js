@@ -46,6 +46,9 @@ function rbac(config) {
 rbac.prototype.IsGranted = function(user, permission, resource) {
     var self = this;
     return new Promise(function(resolve, reject) {
+        if (typeof user === 'undefined'){
+            resolve(false);
+        }
         self.provider.getPermissions(user).then(function(GrantedPermissions) {
             if (GrantedPermissions.indexOf(permission) > -1) {
                 if (resource) {
