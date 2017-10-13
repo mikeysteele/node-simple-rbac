@@ -1,1 +1,1 @@
-module.exports = require('./src/rbac.js');
+module.exports = require('./lib/rbac.js');

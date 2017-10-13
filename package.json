@@ -16,6 +16,8 @@
   "author": "Michael Westcott",
   "license": "MIT",
   "devDependencies": {
-    "grunt-jsbeautifier": "^0.2.13"
+    "@types/node": "^7.0.12",
+    "tsc": "^1.20150623.0",
+    "typescript": "^2.2.2"
   }
 }
