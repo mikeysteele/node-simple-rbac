@@ -5,7 +5,7 @@
  */
 import { ObjectProvider } from './provider/ObjectProvider';
 import { InMemoryProvider } from './provider/InMemoryProvider';
-export default class rbac {
+export class Rbac {
 
     private config: any;
     private guards;
@@ -69,23 +69,18 @@ export default class rbac {
         }
         return providerInstance;
     }
-    private _assert(user, permission, resource) {
+    private _assert(user, permission, resource): Promise<any> {
         const assertion = this.assertions[permission];
         const self = this;
-        return new Promise((resolve, reject) => {
-            if (assertion) {
-                if (typeof assertion === 'function') {
-                    assertion(this, user, resource, (success) => {
-                        resolve(success);
-                        return;
-                    }, (e) => reject(e));
-                } else {
-                    reject('Assertion was not callable');
-                }
+        if (assertion) {
+            if (typeof assertion === 'function') {
+                return assertion(this, user, resource);
             } else {
-                resolve(true);
+                return Promise.reject('Assertion was not callable');
             }
-        });
+        } else {
+            return Promise.reject(true);
+        }
     };
     private _getProviders() {
         if (!this.providers) {
@@ -96,4 +91,3 @@ export default class rbac {
         return this.providers;
     }
 }
-module.exports = rbac;

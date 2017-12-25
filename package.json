@@ -1,11 +1,17 @@
 {
   "name": "node-simple-rbac",
-  "version": "0.0.3-4",
+  "version": "0.1.0",
   "description": "Simple RBAC implementation for node",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/mikeysteele/node-simple-rbac"
+  },
+  "scripts": {
+    "clean": "rimraf lib && rimraf dist",
+    "build": "tsc",
+    "bundle": "mkdirp dist && browserify index.js  >  dist/bundle.js",
+    "uglify": "uglifyjs -o dist/bundle.min.js --compress --mangle -- dist/bundle.js"
   },
   "keywords": [
     "RBAC",
@@ -17,7 +23,10 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^7.0.12",
-    "tsc": "^1.20150623.0",
-    "typescript": "^2.2.2"
+    "browserify": "^14.5.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "typescript": "^2.2.2",
+    "uglify-js": "^3.3.1"
   }
 }

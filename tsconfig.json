@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "umd",
+        "module": "commonjs",
         "target": "es5",
         "lib": [
             "es2015",
@@ -9,11 +9,9 @@
         "outDir": "lib",
         "sourceMap": true,
         "declaration": true,
-        "preserveConstEnums": true,
-        "moduleResolution": "node"        
+        "preserveConstEnums": true       
     },
     "include": [
-        "index.ts",
         "src/**/*.ts"
     ]
 }

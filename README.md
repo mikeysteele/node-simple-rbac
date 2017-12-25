@@ -17,19 +17,19 @@ see examples
 
 # Assertions
 
-Assertions can be used to see if a specific user has access to a specific resource after the permission is checked. For example, when editing an article, we can see if the user is the author or a superuser
+Assertions can be used to see if a specific user has access to a specific resource after the permission is checked. For example, when editing an article, we can see if the user is the author or a superuser. An assertion must return a promise
 ```js
-function assertion(rbac, user, resource, resolve,reject) {
+function assertion(rbac, user, resource) {
         try{
-            rbac.IsGranted(user, 'superuser').then(function (access) {
+            return rbac.IsGranted(user, 'superuser').then(function (access) {
                 if (access){
-                    return resolve(true);
+                    return access;
                 }
-                resolve(user.username === resource.author.username);
+                return user.username === resource.author.username;
             })
             
         }catch(e){
-            reject(e);
+            Promise.reject(e);
         }
 }
 ```

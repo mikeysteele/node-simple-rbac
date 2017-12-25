@@ -1,4 +1,4 @@
-export default class rbac {
+export declare class Rbac {
     private config;
     private guards;
     private assertions;
